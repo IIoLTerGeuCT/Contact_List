@@ -1,32 +1,67 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view />
+    <Contacts :contacts="contacts" />
+    <router-view> </router-view>
   </div>
 </template>
+<script>
+import Contacts from "./components/Contacts.vue";
+export default {
+  components: { Contacts },
+  data() {
+    return {
+      contacts: [
+        {
+          id: "0",
+          surname: "Петров",
+          name: "Петр",
+          patronamic: "Иванович",
+          email: "wwwww.@mail.ru",
+          tel: "+74957556983",
+        },
+        {
+          id: "1",
+          surname: "Иванов",
+          name: "Петр",
+          patronamic: "Иванович",
+          email: "wwwww.@mail.ru",
+          tel: "+78767657623",
+        },
+        {
+          id: "2",
+          surname: "Смирнов",
+          name: "Петр",
+          patronamic: "Иванович",
+          email: "wwwww.@mail.ru",
+          tel: "+75478439032",
+        },
+        {
+          id: "3",
+          surname: "Сидоров",
+          name: "Петр",
+          patronamic: "Иванович",
+          email: "wwwww.@mail.ru",
+          tel: "+71236457123",
+        },
+        {
+          id: "4",
+          surname: "Сидоров",
+          name: "Петр",
+          patronamic: "Иванович",
+          email: "wwwww.@mail.ru",
+          tel: "+71236457123",
+        },
+      ],
+    };
+  },
+  methods: {},
+};
+</script>
 
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 </style>
