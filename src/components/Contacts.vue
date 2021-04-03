@@ -25,36 +25,89 @@
         v-for="item of contacts"
         :key="item.id"
         :itemContact="item"
-        @removeItem="removeSelectItem"
+        @removeItem="showPopupModal"
       />
     </ul>
+    <Popup v-if="showPopup" @confirm="removeSelectItem" />
   </div>
 </template>
 <script>
 import Contact from "@/components/Contact";
+import Popup from "@/components/Popup";
 export default {
-  props: ["contacts"],
-  components: { Contact },
+  data() {
+    return {
+      showPopup: false,
+      selectRemoveContactId: null,
+      contacts: [
+        {
+          id: "0",
+          surname: "Петров",
+          name: "Петр",
+          patronamic: "Иванович",
+          email: "wwwww.@mail.ru",
+          tel: "+74957556983",
+        },
+        {
+          id: "1",
+          surname: "Иванов",
+          name: "Петр",
+          patronamic: "Иванович",
+          email: "wwwww.@mail.ru",
+          tel: "+78767657623",
+        },
+        {
+          id: "2",
+          surname: "Смирнов",
+          name: "Петр",
+          patronamic: "Иванович",
+          email: "wwwww.@mail.ru",
+          tel: "+75478439032",
+        },
+        {
+          id: "3",
+          surname: "Сидоров",
+          name: "Петр",
+          patronamic: "Иванович",
+          email: "wwwww.@mail.ru",
+          tel: "+71236457123",
+        },
+        {
+          id: "4",
+          surname: "Сидоров",
+          name: "Петр",
+          patronamic: "Иванович",
+          email: "wwwww.@mail.ru",
+          tel: "+71236457123",
+        },
+      ],
+    };
+  },
+  components: { Contact, Popup },
   methods: {
     addNewContact() {
       this.contacts.push({
-        id: this.contacts.length,
-        surname: "test",
-        name: "sss",
-        patronamic: "fff",
+        id: +this.contacts[this.contacts.length - 1].id + 1,
+        surname: "Surname",
+        name: "Name",
+        patronamic: "Patronamic",
         tel: "+7 8 764 989 438",
-        email: "rrrr@mail.ru",
+        email: "test@mail.ru",
       });
     },
+    showPopupModal(event) {
+      this.showPopup = true;
+      this.selectRemoveContactId = event;
+    },
     removeSelectItem(event) {
-      this.contacts = this.contacts.filter((item) => item.id !== event);
+      this.showPopup = false;
+      if (event) {
+        this.contacts = this.contacts.filter(
+          (item) => item.id !== this.selectRemoveContactId
+        );
+      }
     },
   },
-  // computed: {
-  //   removeSelectItem(event) {
-  //     this.contacts = this.contacts.filter((item) => item.id !== event);
-  //   },
-  // },
 };
 </script>
 <style lang="scss">
@@ -71,8 +124,6 @@ export default {
 }
 
 .contact__add-btn {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   align-items: center;
   justify-content: center;

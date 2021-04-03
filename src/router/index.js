@@ -1,14 +1,20 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Contacts from "@/components/Contacts.vue";
+import Details from "@/components/Details.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/contacts",
+    path: "/",
     name: "Contacts",
     component: Contacts,
+  },
+  {
+    path: "/contact-details",
+    name: "Details",
+    component: Details,
   },
   // {
   //   path: "/about",

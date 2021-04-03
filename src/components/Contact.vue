@@ -1,6 +1,7 @@
 <template>
   <li class="contact">
     <h3 class="contact__name">
+      {{ itemContact.id }}
       {{ itemContact.surname }}
       {{ itemContact.name }}
       {{ itemContact.patronamic }}
@@ -17,7 +18,9 @@
         </div>
       </div>
       <div class="contact__controls">
-        <button class="contact__btn contact__btn--details">Подробнее</button>
+        <button class="contact__btn contact__btn--details" @click="redirect">
+          Подробнее
+        </button>
         <button
           class="contact__btn contact__btn--delete"
           @click="$emit('removeItem', itemContact.id)"
@@ -31,6 +34,11 @@
 <script>
 export default {
   props: ["itemContact"],
+  methods: {
+    redirect() {
+      this.$router.push(`/contact-details?${this.itemContact.id}`);
+    },
+  },
 };
 </script>
 <style lang="scss">
