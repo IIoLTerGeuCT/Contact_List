@@ -18,9 +18,13 @@
         </div>
       </div>
       <div class="contact__controls">
-        <button class="contact__btn contact__btn--details" @click="redirect">
+        <router-link
+          class="contact__btn contact__btn--details"
+          to="/contact-details"
+          tag="button"
+        >
           Подробнее
-        </button>
+        </router-link>
         <button
           class="contact__btn contact__btn--delete"
           @click="$emit('removeItem', itemContact.id)"
@@ -34,11 +38,7 @@
 <script>
 export default {
   props: ["itemContact"],
-  methods: {
-    redirect() {
-      this.$router.push(`/contact-details?${this.itemContact.id}`);
-    },
-  },
+  methods: {},
 };
 </script>
 <style lang="scss">

@@ -2,7 +2,7 @@
   <div class="contacts">
     <h1 class="contacts__title">Список контактов</h1>
     <div class="contacts__controls">
-      <button class="contact__add-btn" @click="addNewContact">
+      <button class="contact__add-btn" @click="addNewItemContact">
         <svg
           aria-hidden="true"
           focusable="false"
@@ -22,7 +22,7 @@
     </div>
     <ul class="contacts__content">
       <Contact
-        v-for="item of contacts"
+        v-for="item of allContacts"
         :key="item.id"
         :itemContact="item"
         @removeItem="showPopupModal"
@@ -34,77 +34,47 @@
 <script>
 import Contact from "@/components/Contact";
 import Popup from "@/components/Popup";
+import { mapGetters, mapActions } from "vuex";
+
 export default {
   data() {
     return {
       showPopup: false,
       selectRemoveContactId: null,
-      contacts: [
-        {
-          id: "0",
-          surname: "Петров",
-          name: "Петр",
-          patronamic: "Иванович",
-          email: "wwwww.@mail.ru",
-          tel: "+74957556983",
-        },
-        {
-          id: "1",
-          surname: "Иванов",
-          name: "Петр",
-          patronamic: "Иванович",
-          email: "wwwww.@mail.ru",
-          tel: "+78767657623",
-        },
-        {
-          id: "2",
-          surname: "Смирнов",
-          name: "Петр",
-          patronamic: "Иванович",
-          email: "wwwww.@mail.ru",
-          tel: "+75478439032",
-        },
-        {
-          id: "3",
-          surname: "Сидоров",
-          name: "Петр",
-          patronamic: "Иванович",
-          email: "wwwww.@mail.ru",
-          tel: "+71236457123",
-        },
-        {
-          id: "4",
-          surname: "Сидоров",
-          name: "Петр",
-          patronamic: "Иванович",
-          email: "wwwww.@mail.ru",
-          tel: "+71236457123",
-        },
-      ],
     };
   },
   components: { Contact, Popup },
+  computed: mapGetters(["allContacts", "getLastId"]),
   methods: {
-    addNewContact() {
-      this.contacts.push({
-        id: +this.contacts[this.contacts.length - 1].id + 1,
+    // Добавление нового контакта
+    ...mapActions(["addNewContact"]),
+    addNewItemContact() {
+      // Сформировали новый шаблонный объект
+      const item = {
+        id: this.getLastId,
         surname: "Surname",
         name: "Name",
         patronamic: "Patronamic",
         tel: "+7 8 764 989 438",
         email: "test@mail.ru",
-      });
+      };
+      // Добавление в store
+      this.addNewContact(item);
     },
+
+    //  Вывод модального окна
     showPopupModal(event) {
       this.showPopup = true;
       this.selectRemoveContactId = event;
     },
+
+    // Удаление выбранного элемента
+    ...mapActions(["removeItem"]),
     removeSelectItem(event) {
       this.showPopup = false;
       if (event) {
-        this.contacts = this.contacts.filter(
-          (item) => item.id !== this.selectRemoveContactId
-        );
+        // Если условие POPUP вернет true = удаляем, false = отмена
+        this.removeItem(this.selectRemoveContactId);
       }
     },
   },

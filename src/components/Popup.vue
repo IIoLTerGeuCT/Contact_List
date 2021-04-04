@@ -54,19 +54,29 @@
 }
 .container__controls {
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   padding-top: 8px;
 }
 .btn {
   padding: 2px 10px;
+  width: 100%;
+  height: 32px;
+  cursor: pointer;
+  color: #fff;
+  font-weight: 500;
+  border: transparent;
+  border-radius: 4px;
 }
 .btn-confirm {
-  margin-right: 20px;
-  color: #42b983;
+  width: 100px;
+  background-color: #8ac926;
+  color: #fff;
   font-weight: 500;
 }
 .btn-cancel {
-  color: red;
+  width: 100px;
+  color: #fff;
+  background-color: #ff595e;
   font-weight: 500;
 }
 </style>
