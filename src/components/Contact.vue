@@ -20,7 +20,8 @@
       <div class="contact__controls">
         <router-link
           class="contact__btn contact__btn--details"
-          to="/contact-details"
+          :to="{ name: 'Details',  params: { id: itemContact.id } }"
+
           tag="button"
         >
           Подробнее
@@ -31,6 +32,7 @@
         >
           Удалить
         </button>
+        <!-- :to="{ path: '/contacts-details?id=' + itemContact.id }" -->
       </div>
     </div>
   </li>

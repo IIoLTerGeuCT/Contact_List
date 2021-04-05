@@ -51,7 +51,7 @@ export default {
     addNewItemContact() {
       // Сформировали новый шаблонный объект
       const item = {
-        id: this.getLastId,
+        id: +this.getLastId,
         surname: "Surname",
         name: "Name",
         patronamic: "Patronamic",

@@ -2,7 +2,7 @@ export default {
   state: {
     contacts: [
       {
-        id: "0",
+        id: 0,
         surname: "Петров",
         name: "Петр",
         patronamic: "Иванович",
@@ -10,7 +10,7 @@ export default {
         tel: "+74957556983",
       },
       {
-        id: "1",
+        id: 1,
         surname: "Иванов",
         name: "Петр",
         patronamic: "Иванович",
@@ -18,7 +18,7 @@ export default {
         tel: "+78767657623",
       },
       {
-        id: "2",
+        id: 2,
         surname: "Смирнов",
         name: "Владимир",
         patronamic: "Петрович",
@@ -26,7 +26,7 @@ export default {
         tel: "+75478439032",
       },
       {
-        id: "3",
+        id: 3,
         surname: "Сидоров",
         name: "Максим",
         patronamic: "Яковлевич",
@@ -34,7 +34,7 @@ export default {
         tel: "+71236457123",
       },
       {
-        id: "4",
+        id: 4,
         surname: "Кошкин",
         name: "Николай",
         patronamic: "Николаевич",
@@ -64,12 +64,6 @@ export default {
     allContacts(state) {
       return state.contacts;
     },
-    getCurrentItem(state, id) {
-      console.log(id);
-      const obj = state.contacts.map((item) => item.id === id);
-      return obj;
-    },
-    // TODO Сделать получение Id для нового элемента
     getLastId(state) {
       return +state.contacts[state.contacts.length - 1].id + 1;
     },
