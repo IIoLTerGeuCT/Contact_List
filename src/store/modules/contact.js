@@ -64,6 +64,11 @@ export default {
     allContacts(state) {
       return state.contacts;
     },
+    getCurrentItem(state, id) {
+      console.log(id);
+      const obj = state.contacts.map((item) => item.id === id);
+      return obj;
+    },
     // TODO Сделать получение Id для нового элемента
     getLastId(state) {
       return +state.contacts[state.contacts.length - 1].id + 1;
