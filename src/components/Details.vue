@@ -39,7 +39,9 @@
           />
         </div>
         <div class="addNewProps__controls">
-          <button class="addNewProps__ок">Сохранить</button>
+          <button class="addNewProps__ок" @click="saveNewPaire">
+            Добавить
+          </button>
           <button class="addNewProps__cancel" @click="visibleAddForm = false">
             Отменить
           </button>
@@ -53,17 +55,23 @@
         >
           <input type="text" class="details__key" :value="key" />
           <input type="text" class="details__value" :value="value" />
+
           <button class="details__remove-key" @click="showPopupModal(key)">
             Удалить
           </button>
         </div>
       </div>
+      <div class="details__controls-btn">
+        <button class="details__save">Сохранить</button>
+        <button class="details__restore">Отменить</button>
+      </div>
     </div>
-    <Popup v-if="showPopup" @confirm="removeSelectItem" />
+    <Popup v-if="showPopup" @confirm="removePaire" />
   </div>
 </template>
 <script>
 import { mapGetters } from "vuex";
+import Popup from "@/components/Popup";
 export default {
   data() {
     return {
@@ -80,9 +88,11 @@ export default {
   computed: {
     ...mapGetters(["allContacts"]),
   },
+  components: { Popup },
   created() {
     try {
       this.getData(); // Загрузка данных в компонент
+      this.getPaire(); // Получение массив ключ/значение
     } catch (ex) {
       console.log(ex);
     }
@@ -95,20 +105,36 @@ export default {
       this.contact = this.allContacts.find(
         (item) => item.id === this.selectedContactId
       );
-      // Получим массив ключ/значение
-      this.arrayPaire = Object.entries(this.contact);
+    },
+    getPaire() {
+      try {
+        // Получим массив ключ/значение
+        this.arrayPaire = Object.entries(this.contact);
+      } catch (ex) {
+        console.log(ex);
+      }
+    },
+    saveNewPaire() {
+      // Добавление новой пары
+      this.contact[`${this.newKey}`] = this.newValue;
+      this.getPaire();
+
+      // Очистка полей ввода
+      this.newKey = "";
+      this.newValue = "";
     },
     showPopupModal(key) {
+      // Показать модальное окно
       this.showPopup = true;
+      // Сохраним ключ по которому было вызванно событие
       this.selectRemoveKey = key;
     },
     removePaire(state) {
       this.showPopup = false;
       if (state) {
         this.$delete(this.contact, this.selectRemoveKey);
-        this.arrayPaire = Object.entries(this.contact);
+        this.getPaire();
       }
-      console.log(this.arrayPaire);
     },
   },
 };
@@ -133,12 +159,7 @@ export default {
   justify-content: center;
   width: 100%;
   height: 32px;
-  cursor: pointer;
   background: #8ac926;
-  color: #fff;
-  font-weight: 500;
-  border: transparent;
-  border-radius: 4px;
 }
 .details__add-btn svg {
   width: 24px;
@@ -161,15 +182,7 @@ export default {
   display: flex;
   justify-content: center;
   padding-top: 10px;
-  button {
-    width: 160px;
-    height: 28px;
-    color: #fff;
-    border-radius: 4px;
-    border-color: transparent;
-    font-size: 14px;
-    font-weight: 500;
-  }
+
   :first-child {
     margin-right: 10px;
     background-color: #8ac926;
@@ -178,48 +191,49 @@ export default {
     background-color: #ff595e;
   }
 }
-.details__field {
+.details__btn-controls {
+  display: flex;
 }
 .details__key,
 .details__value {
   width: 200px;
   height: 28px;
 }
-.details__keys {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-.details__values {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-.details__field {
-  justify-content: space-around;
-}
+
 .details__contact {
   padding-top: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-around;
 }
-.details__remove-key {
+button {
   height: 28px;
-  width: 100px;
   color: #fff;
-  background-color: #ff595e;
-  border: none;
   border: transparent;
   border-radius: 4px;
   cursor: pointer;
+  width: 100px;
+  font-size: 14px;
+  font-weight: 500;
+}
+.details__save {
+  background-color: #8ac926;
+  margin-right: 10px;
+}
+.details__restore {
+  background-color: #1982c4;
+}
+.details__remove-key {
+  background-color: #ff595e;
 }
 input {
   margin-top: 5px;
   margin-right: 5px;
+}
+.details__controls-btn {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
