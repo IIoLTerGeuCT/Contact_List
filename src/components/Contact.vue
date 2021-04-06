@@ -31,7 +31,6 @@
         >
           Удалить
         </button>
-        <!-- :to="{ path: '/contacts-details?id=' + itemContact.id }" -->
       </div>
     </div>
   </li>

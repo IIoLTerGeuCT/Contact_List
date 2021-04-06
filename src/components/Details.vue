@@ -39,21 +39,27 @@
           />
         </div>
         <div class="addNewProps__controls">
-          <button class="addNewProps__ок" @click="saveNewPaire">
-            Сохранить
-          </button>
+          <button class="addNewProps__ок">Сохранить</button>
           <button class="addNewProps__cancel" @click="visibleAddForm = false">
             Отменить
           </button>
         </div>
       </div>
       <div class="details__contact">
-        <div class="details__field" v-for="item in arrayPaire" :key="item.key" >
-          <input type="text" class="details__key" :value="item.key" />
-          <input type="text" class="details__value" :value="item.value" />
+        <div
+          class="details__field"
+          v-for="[key, value] in arrayPaire"
+          :key="key"
+        >
+          <input type="text" class="details__key" :value="key" />
+          <input type="text" class="details__value" :value="value" />
+          <button class="details__remove-key" @click="showPopupModal(key)">
+            Удалить
+          </button>
         </div>
       </div>
     </div>
+    <Popup v-if="showPopup" @confirm="removeSelectItem" />
   </div>
 </template>
 <script>
@@ -67,6 +73,8 @@ export default {
       visibleAddForm: false, //Состояние формы добавления новой пары ключ/значение
       newKey: "",
       newValue: "",
+      showPopup: false,
+      selectRemoveKey: null,
     };
   },
   computed: {
@@ -87,19 +95,21 @@ export default {
       this.contact = this.allContacts.find(
         (item) => item.id === this.selectedContactId
       );
-      this.arrayPaire = Object.entries(this.contact).map(([key, value]) => [key, value * 2])
-
+      // Получим массив ключ/значение
+      this.arrayPaire = Object.entries(this.contact);
+    },
+    showPopupModal(key) {
+      this.showPopup = true;
+      this.selectRemoveKey = key;
+    },
+    removePaire(state) {
+      this.showPopup = false;
+      if (state) {
+        this.$delete(this.contact, this.selectRemoveKey);
+        this.arrayPaire = Object.entries(this.contact);
+      }
       console.log(this.arrayPaire);
     },
-    // Ключи
-    getKeys() {
-      this.keys = Object.keys(this.contact);
-    },
-    // Значения
-    getValues() {
-      this.values = Object.values(this.contact);
-    },
-    saveNewPaire() {},
   },
 };
 </script>
@@ -146,6 +156,7 @@ export default {
     margin-right: 10px;
   }
 }
+
 .addNewProps__controls {
   display: flex;
   justify-content: center;
@@ -169,6 +180,11 @@ export default {
 }
 .details__field {
 }
+.details__key,
+.details__value {
+  width: 200px;
+  height: 28px;
+}
 .details__keys {
   display: flex;
   flex-direction: column;
@@ -182,7 +198,28 @@ export default {
   align-items: center;
   justify-content: center;
 }
+.details__field {
+  justify-content: space-around;
+}
 .details__contact {
   padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+.details__remove-key {
+  height: 28px;
+  width: 100px;
+  color: #fff;
+  background-color: #ff595e;
+  border: none;
+  border: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+}
+input {
+  margin-top: 5px;
+  margin-right: 5px;
 }
 </style>
