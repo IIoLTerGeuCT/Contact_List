@@ -53,8 +53,14 @@
           v-for="[key, value] in arrayPaire"
           :key="key"
         >
-          <input type="text" class="details__key" :value="key" />
-          <input type="text" class="details__value" :value="value" />
+          <input type="text" :id="key" class="details__key" :value="key" />
+          <input
+            type="text"
+            :id="key + '_value'"
+            class="details__value"
+            :value="value"
+            :v-model="key"
+          />
 
           <button class="details__remove-key" @click="showPopupModal(key)">
             Удалить
@@ -62,11 +68,13 @@
         </div>
       </div>
       <div class="details__controls-btn">
-        <button class="details__save">Сохранить</button>
-        <button class="details__restore">Отменить</button>
+        <button class="details__save" @click="saveUpdateContact">
+          Сохранить
+        </button>
+        <button class="details__restore" @click="test1">Отменить</button>
       </div>
     </div>
-    <Popup v-if="showPopup" @confirm="removePaire" />
+    <Popup v-if="showPopup" :title="popupTitle" @confirm="removePaire" />
   </div>
 </template>
 <script>
@@ -76,47 +84,47 @@ export default {
   data() {
     return {
       selectedContactId: null, // Выбранный контакт ID
-      contact: null, // Объект контакт
-      arrayPaire: null,
+      mainContact: null, // Основной объект контакт
+      copyContact: null, // Копия основного контакта для сохранения нескольких состояний
+      arrayPaire: null, // Массив ключ/значения
       visibleAddForm: false, //Состояние формы добавления новой пары ключ/значение
-      newKey: "",
-      newValue: "",
-      showPopup: false,
-      selectRemoveKey: null,
+      newKey: "", // Поля для новых значений
+      newValue: "", //
+      showPopup: false, // состояние POPUP
+      selectRemoveKey: null, // Выбранный элемент для удаления
+      popupTitle: "", // Заголовок сообщения в POPUP окне
+      statePOPUP: null, // Состояние результат
     };
   },
   computed: {
     ...mapGetters(["allContacts"]),
   },
   components: { Popup },
-  created() {
-    try {
-      this.getData(); // Загрузка данных в компонент
-      this.getPaire(); // Получение массив ключ/значение
-    } catch (ex) {
-      console.log(ex);
-    }
+  mounted() {
+    this.getData(); // Загрузка данных в компонент
+    this.getPaire(); // Получение массив ключ/значение
   },
   methods: {
     getData() {
-      // // Получим параметр из маршрута
+      // Получим параметр из маршрута
       this.selectedContactId = this.$route.params.id;
       // Найдем необходимый контакт
-      this.contact = this.allContacts.find(
+      this.mainContact = this.allContacts.find(
         (item) => item.id === this.selectedContactId
       );
+      console.log(this.mainContact);
+      // Создадим копию контакта, и дальше работаем с копией
+      this.copyContact = Object.assign(this.mainContact);
     },
     getPaire() {
-      try {
+      if (this.copyContact) {
         // Получим массив ключ/значение
-        this.arrayPaire = Object.entries(this.contact);
-      } catch (ex) {
-        console.log(ex);
+        this.arrayPaire = Object.entries(this.copyContact);
       }
     },
     saveNewPaire() {
       // Добавление новой пары
-      this.contact[`${this.newKey}`] = this.newValue;
+      this.copyContact[`${this.newKey}`] = this.newValue;
       this.getPaire();
 
       // Очистка полей ввода
@@ -124,6 +132,8 @@ export default {
       this.newValue = "";
     },
     showPopupModal(key) {
+      this.popupTitle =
+        "Вы действительно хотите удалить эту пару (ключ/значение)?";
       // Показать модальное окно
       this.showPopup = true;
       // Сохраним ключ по которому было вызванно событие
@@ -132,9 +142,34 @@ export default {
     removePaire(state) {
       this.showPopup = false;
       if (state) {
-        this.$delete(this.contact, this.selectRemoveKey);
+        this.$delete(this.copyContact, this.selectRemoveKey);
         this.getPaire();
       }
+    },
+    test1() {
+      console.log(`test1`);
+    },
+    test2() {
+      console.log(`test 2`);
+    },
+    saveUpdateContact() {
+      this.popupTitle = "Сохранить изменения в контакте?";
+      // Показать модальное окно
+      this.showPopup = true;
+      // // Получим все инпуты
+      // const inputs = document.querySelectorAll("input");
+      // // Массивы ключ/значение, что бы руками не прописывать все id input
+      // // Так как точно не знаем сколько будет input,
+      // const arrayKeys = [];
+      // const arrayValues = [];
+      // // Разделим данные по массивам
+      // for (let i = 0; i < inputs.length; i++) {
+      //   if (i % 2 === 0) {
+      //     arrayKeys.push(inputs[i].value);
+      //   } else {
+      //     arrayValues.push(inputs[i].value);
+      //   }
+      // }
     },
   },
 };

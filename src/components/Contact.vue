@@ -1,10 +1,9 @@
 <template>
   <li class="contact">
     <h3 class="contact__name">
-      {{ itemContact.id }}
       {{ itemContact.surname }}
       {{ itemContact.name }}
-      {{ itemContact.patronamic }}
+      {{ itemContact.patronymic }}
     </h3>
     <div class="contact__content">
       <div id="contact__data" class="contact__data">

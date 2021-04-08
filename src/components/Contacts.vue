@@ -28,7 +28,7 @@
         @removeItem="showPopupModal"
       />
     </ul>
-    <Popup v-if="showPopup" @confirm="removeSelectItem" />
+    <Popup v-if="showPopup" :title="popupTitle" @confirm="removeSelectItem" />
   </div>
 </template>
 <script>
@@ -41,6 +41,7 @@ export default {
     return {
       showPopup: false,
       selectRemoveContactId: null,
+      popupTitle: null,
     };
   },
   components: { Contact, Popup },
@@ -54,7 +55,7 @@ export default {
         id: +this.getLastId,
         surname: "Surname",
         name: "Name",
-        patronamic: "Patronamic",
+        patronymic: "Patronymic",
         tel: "+7 8 764 989 438",
         email: "test@mail.ru",
       };
@@ -64,6 +65,8 @@ export default {
 
     //  Вывод модального окна
     showPopupModal(event) {
+      this.popupTitle =
+        "Вы действительно хотите удалить данный контакт из списка?";
       this.showPopup = true;
       this.selectRemoveContactId = event;
     },
@@ -81,7 +84,6 @@ export default {
 };
 </script>
 <style lang="scss">
-
 @import url("/style/common.css");
 .contacts {
   max-width: 800px;

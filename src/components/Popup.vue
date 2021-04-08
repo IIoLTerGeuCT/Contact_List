@@ -3,7 +3,7 @@
     <div class="model__wrapper">
       <div class="model__container">
         <div class="container__title">
-          <h3 class="title">Вы действительно хотите выполнить это действие?</h3>
+          <h3 class="title">{{ title }}</h3>
         </div>
         <div class="container__controls">
           <div class="container__btn-confirm">
@@ -21,6 +21,11 @@
     </div>
   </div>
 </template>
+<script>
+export default {
+  props: ["title"],
+};
+</script>
 
 <style lang="scss">
 .model {
